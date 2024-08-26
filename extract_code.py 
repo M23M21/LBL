@@ -1,0 +1,27 @@
+import os
+
+# Define the directory containing your project
+project_dir = '.'  # This represents the current directory
+
+# Define the output file
+output_file = 'output.txt'
+
+# Open the output file in write mode
+with open(output_file, 'w') as outfile:
+    # Walk through the project directory
+    for root, dirs, files in os.walk(project_dir):
+        # Skip the node_modules directory
+        if 'node_modules' in dirs:
+            dirs.remove('node_modules')
+        for file in files:
+            # Only process source code files (e.g., .cs, .js, .py, .html, .css, .java, .cpp, .h)
+            if file.endswith(('.cs', '.js', '.jsx', '.ts', '.tsx', '.py', '.html', '.css', '.java', '.cpp', '.h')):
+                file_path = os.path.join(root, file)
+                try:
+                    with open(file_path, 'r', encoding='utf-8') as infile:
+                        # Write a header with the full file path
+                        outfile.write(f'// Filename: {file_path}\n')
+                        outfile.write(infile.read())
+                        outfile.write('\n\n')
+                except Exception as e:
+                    print(f"Error reading {file_path}: {e}")
